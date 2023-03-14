@@ -36,7 +36,7 @@ class SimpleHead(BaseHead):
             self.dropout = nn.Dropout(p=self.dropout_ratio)
         else:
             self.dropout = None
-        assert mode in ['3D', 'GCN', '2D']
+        assert mode in ['3D', 'GCN', '2D', 'TR']
         self.mode = mode
 
         self.in_c = in_channels
@@ -85,6 +85,9 @@ class SimpleHead(BaseHead):
                 x = pool(x)
                 x = x.reshape(N, M, C)
                 x = x.mean(dim=1)
+            if self.mode == 'TR':
+                # N, M, T, C
+                x = torch.mean(x, [1, 2])
 
         assert x.shape[1] == self.in_c
         if self.dropout is not None:
@@ -134,6 +137,25 @@ class GCNHead(SimpleHead):
                          dropout=dropout,
                          init_std=init_std,
                          mode='GCN',
+                         **kwargs)
+
+
+@HEADS.register_module()
+class TRHead(SimpleHead):
+
+    def __init__(self,
+                 num_classes,
+                 in_channels,
+                 loss_cls=dict(type='CrossEntropyLoss'),
+                 dropout=0.5,
+                 init_std=0.01,
+                 **kwargs):
+        super().__init__(num_classes,
+                         in_channels,
+                         loss_cls=loss_cls,
+                         dropout=dropout,
+                         init_std=init_std,
+                         mode='TR',
                          **kwargs)
 
 

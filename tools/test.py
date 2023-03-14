@@ -19,6 +19,11 @@ from pyskl.models import build_model
 from pyskl.utils import cache_checkpoint, mc_off, mc_on, test_port
 
 
+print(f"CPU Count: {os.cpu_count()}")
+torch.set_num_threads(os.cpu_count())
+print(f"Num threads: {torch.get_num_threads()}")
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description='pyskl test (and eval) a model')
