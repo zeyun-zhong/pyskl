@@ -429,7 +429,7 @@ class FormatGCNInput:
 
     def __init__(self, num_person=2, mode='zero'):
         self.num_person = num_person
-        assert mode in ['zero', 'loop']
+        assert mode in ['zero', 'loop', 'copy']
         self.mode = mode
 
     def __call__(self, results):
@@ -446,11 +446,16 @@ class FormatGCNInput:
         # M T V C
         if keypoint.shape[0] < self.num_person:
             pad_dim = self.num_person - keypoint.shape[0]
-            pad = np.zeros((pad_dim, ) + keypoint.shape[1:], dtype=keypoint.dtype)
-            keypoint = np.concatenate((keypoint, pad), axis=0)
-            if self.mode == 'loop' and keypoint.shape[0] == 1:
-                for i in range(1, self.num_person):
-                    keypoint[i] = keypoint[0]
+            if self.mode == 'copy':
+                assert keypoint.shape[0] == 1
+                tmp = [keypoint for _ in range(pad_dim + 1)]
+                keypoint = np.concatenate(tmp, axis=0)
+            else:
+                pad = np.zeros((pad_dim, ) + keypoint.shape[1:], dtype=keypoint.dtype)
+                keypoint = np.concatenate((keypoint, pad), axis=0)
+                if self.mode == 'loop' and keypoint.shape[0] == 1:
+                    for i in range(1, self.num_person):
+                        keypoint[i] = keypoint[0]
 
         elif keypoint.shape[0] > self.num_person:
             keypoint = keypoint[:self.num_person]

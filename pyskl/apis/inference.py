@@ -71,10 +71,6 @@ def inference_recognizer(model, video, outputs=None, as_tensor=True, **kwargs):
         dict[torch.tensor | np.ndarray]:
             Output feature maps from layers specified in `outputs`.
     """
-    print(f"CPU Count: {os.cpu_count()}")
-    torch.set_num_threads(os.cpu_count())
-    print(f"Num threads: {torch.get_num_threads()}")
-
     if 'use_frames' in kwargs:
         warnings.warn('The argument `use_frames` is deprecated PR #1191. '
                       'Now you can use models trained with frames or videos '

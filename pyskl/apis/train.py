@@ -69,10 +69,6 @@ def train_model(model,
         meta (dict | None): Meta dict to record some important information.
             Default: None
     """
-    print(f"CPU Count: {os.cpu_count()}")
-    torch.set_num_threads(os.cpu_count())
-    print(f"Num threads: {torch.get_num_threads()}")
-
     logger = get_root_logger(log_level=cfg.get('log_level', 'INFO'))
 
     # prepare data loaders
