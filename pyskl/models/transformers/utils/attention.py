@@ -14,7 +14,7 @@ def add_spatial_global_regularization(attn, tensor, tv_shape=(16, 25), has_cls_e
     N_ = tv_shape[0] * tensor.size(-1)
     assert (N_ == N) or (N_ == N - 1)
     spatial_regularization = torch.zeros_like(attn)
-    tensor = tensor.repeat(B, H, tv_shape[0], tv_shape[0])
+    tensor = tensor.repeat(B, 1, tv_shape[0], tv_shape[0])
     if has_cls_embed:
         spatial_regularization[..., 1:, 1:] = tensor
     else:

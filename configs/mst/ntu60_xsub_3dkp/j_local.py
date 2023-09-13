@@ -1,3 +1,6 @@
+clip_len = 32
+sample_rate = 3
+
 model = dict(
     type='RecognizerGCN',
     backbone=dict(
@@ -10,18 +13,20 @@ model = dict(
         depth=10,
         num_heads=1,
         spatial_size=25,
-        temporal_size=16,
+        temporal_size=clip_len,
         drop_rate=0.,
         drop_path=0.3,
         dim_mul_layers=([3, 2.0], [8, 2.0]),
         pool_q_stride_scale=1,
-        pool_t_stride_scale=2,
-        pool_kvq_kernel=(3, 3),
+        pool_t_stride_scale=1,
+        pool_kvq_kernel=(),
         pool_kv_stride_adaptive=None,
         pool_kv_stride_as_q=True,
         mode="conv",
         pool_first=False,
-        spatial_regularization=True,
+        rel_pos_spatial_temporal=False,
+        use_abs_pos=True,
+        sep_pos_embed=True,
     ),
     cls_head=dict(type='TRHead', num_classes=60, in_channels=256, dropout=0.5))
 
@@ -29,8 +34,6 @@ dataset_type = 'PoseDataset'
 # ann_file = '/hkfs/work/workspace_haic/scratch/on3546-Datasets/NTURGBD/ntu60_3danno.pkl'
 ann_file = '/home/zhong/Documents/datasets/NTU_60/ntu60_3danno.pkl'
 # ann_file = '/pfs/work8/workspace/ffuc/scratch/on3546-datasets/NTURGBD/ntu60_3danno.pkl'
-clip_len = 4
-sample_rate = 3
 mode = 'copy'
 train_pipeline = [
     dict(type='PreNormalize3D'),

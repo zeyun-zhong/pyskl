@@ -339,7 +339,7 @@ class MST(nn.Module):
                     1, self.patch_dims[0], 1
                 ) + torch.repeat_interleave(
                     self.pos_embed_temporal,
-                    self.patch_dims[1] * self.patch_dims[2],
+                    self.patch_dims[1],
                     dim=1,
                 )
                 if self.cls_embed_on:

@@ -1,12 +1,18 @@
 #!/usr/bin/env bash
 
-torchrun --nproc_per_node=4 tools/train.py configs/mst/ntu60_xsub_3dkp/j.py --launcher pytorch --validate --seed 42
+export MASTER_PORT=$((12000 + $RANDOM % 20000))
+set -x
 
-torchrun --nproc_per_node=4 tools/train.py configs/mst/ntu60_xsub_3dkp/j1.py --launcher pytorch --validate --seed 42
+export CUDA_VISIBLE_DEVICES=0,1,2,3
 
-torchrun --nproc_per_node=4 tools/train.py configs/mst/ntu60_xsub_3dkp/j2.py --launcher pytorch --validate --seed 42
+torchrun --nproc_per_node=4 --master_port=$MASTER_PORT \
+tools/train.py configs/mst/ntu60_xsub_3dkp/j.py --launcher pytorch --validate --seed 42
 
-torchrun --nproc_per_node=4 tools/train.py configs/mst/ntu60_xsub_3dkp/j3.py --launcher pytorch --validate --seed 42
-
-torchrun --nproc_per_node=4 tools/train.py configs/mst/ntu60_xsub_3dkp/j4.py --launcher pytorch --validate --seed 42
+#torchrun --nproc_per_node=4 tools/train.py configs/mst/ntu60_xsub_3dkp/j1.py --launcher pytorch --validate --seed 42
+#
+#torchrun --nproc_per_node=4 tools/train.py configs/mst/ntu60_xsub_3dkp/j2.py --launcher pytorch --validate --seed 42
+#
+#torchrun --nproc_per_node=4 tools/train.py configs/mst/ntu60_xsub_3dkp/j3.py --launcher pytorch --validate --seed 42
+#
+#torchrun --nproc_per_node=4 tools/train.py configs/mst/ntu60_xsub_3dkp/j4.py --launcher pytorch --validate --seed 42
 
