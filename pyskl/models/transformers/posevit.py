@@ -7,23 +7,7 @@ from typing import Tuple, Optional
 
 from ...utils import Graph, cache_checkpoint
 from ..builder import BACKBONES
-
-
-class PositionalEncoding(nn.Module):
-    def __init__(self, hidden_dim, max_position_embeddings=512):
-        super().__init__()
-        self.register_buffer("position_ids", torch.arange(max_position_embeddings).expand((1, -1)))
-        self.position_embeddings = nn.Embedding(max_position_embeddings, hidden_dim)
-
-    def forward(self, x: Tensor):
-        """
-        :param x: (B, T, C)
-        :return: (B, T, C)
-        """
-        seq_length = x.size(1)
-        position_ids = self.position_ids[:, :seq_length]
-        x = x + self.position_embeddings(position_ids)
-        return x
+from .utils import PositionalEncoding
 
 
 def _init_weights(module) -> None:
